@@ -24,6 +24,18 @@ import asyncio
 conn = sqlite3.connect("data.db", check_same_thread=False)
 cur = conn.cursor()
 
+conn.execute("""
+    CREATE TABLE IF NOT EXISTS TURNS
+    (
+        NAME TEXT NOT NULL,
+        TURNTIME TEXT NOT NULL,
+        TURNNUMBER INTEGER NOT NULL,
+        GAMENAME TEXT NOT NULL,
+        PRIMARY KEY (NAME, TURNNUMBER, GAMENAME)
+    );
+""")
+conn.commit()
+
 intents = discord.Intents.default()
 intents.messages = True
 intents.guilds = True
