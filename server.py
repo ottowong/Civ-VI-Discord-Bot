@@ -147,8 +147,8 @@ def webhook():
         oldTurn = turn
 
         # map names to discord IDs
-        realName = get_discord_id(player)
-        content += (realName + ", take your turn #" + turn)
+        discordName = get_discord_id(player)
+        content += (discordName + ", take your turn #" + turn)
 
         # create turnorder
         turnorder = []
