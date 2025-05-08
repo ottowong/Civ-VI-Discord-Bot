@@ -162,7 +162,12 @@ def webhook():
 
         # create turnorder
         turnorder = []
-        cur.execute("SELECT * FROM TURNS WHERE TURNNUMBER = ? AND GAMENAME = ? ORDER BY TURNTIME ASC",(str(int(turn)-1),game))
+
+        if int(turn) == 1: # for the first turn only
+            cur.execute("SELECT * FROM TURNS WHERE TURNNUMBER = 1 AND GAMENAME = ? ORDER BY TURNTIME ASC", (game,))
+        else:
+            cur.execute("SELECT * FROM TURNS WHERE TURNNUMBER = ? AND GAMENAME = ? ORDER BY TURNTIME ASC", (str(int(turn)-1), game))
+
         firstTurns = cur.fetchall()
         if(len(firstTurns) > 0):
             for item in firstTurns:
