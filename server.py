@@ -165,9 +165,9 @@ def webhook():
             print("player:",player)
             lastPlayer = turnorder[turnorder.index(player)-1]
         else: # if it's the first turn of the game
-            conn.execute("INSERT INTO TURNS (NAME, TURNTIME, TURNNUMBER, GAMENAME) VALUES(?, ?, ?, ?)",(os.getenv("first_player"), str(datetime.now()-timedelta(seconds=60)), 1, game)) # add an entry for 10 seconds ago for the first player, defined in .env
+            conn.execute("INSERT INTO TURNS (NAME, TURNTIME, TURNNUMBER, GAMENAME) VALUES(?, ?, ?, ?)",(os.getenv("host_steam_name"), str(datetime.now()-timedelta(seconds=60)), 1, game)) # add an entry for 10 seconds ago for the first player, defined in .env
             conn.commit()
-            lastPlayer = os.getenv("first_player")
+            lastPlayer = os.getenv("host_steam_name")
 
         cur.execute("SELECT * FROM TURNS WHERE NAME = ? AND TURNNUMBER = ? AND GAMENAME = ?",(player, turn, game))
         lastTurn = cur.fetchall()
@@ -229,7 +229,7 @@ def webhook():
         colour_queue.append(color)
         player_queue.append(player)
         message_queue.append(content)
-        mention_queue.append(realName)
+        mention_queue.append(discordName)
 
         
         # data = {"content":content}
