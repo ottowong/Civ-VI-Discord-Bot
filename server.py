@@ -71,8 +71,6 @@ def get_pronoun(player):
 with open("emoji.json", "r") as f:
     EMOJI_THRESHOLDS = sorted(json.load(f), key=lambda x: x["seconds"], reverse=True)
 
-print(EMOJI_THRESHOLDS)
-
 def get_time_emoji(seconds_elapsed):
     for threshold in EMOJI_THRESHOLDS:
         if seconds_elapsed >= threshold["seconds"]:
