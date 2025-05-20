@@ -52,6 +52,7 @@ message_queue = []
 mention_queue = []
 colour_queue = []
 player_queue = []
+game_name_queue = []
 
 webhook_url = os.getenv("webhook_url")
 
@@ -247,6 +248,7 @@ def webhook():
         player_queue.append(player)
         message_queue.append(content)
         mention_queue.append(discordName)
+        game_name_queue.append(game)
 
         
         # data = {"content":content}
@@ -265,11 +267,13 @@ async def on_ready():
                 player = player_queue.pop(0)
                 mention = mention_queue.pop(0)
                 colour = colour_queue.pop(0)
+                game = game_name_queue.pop(0)
                 print(message)
                 print(player)
                 print(colour)
                 print(mention)
-                embedVar = discord.Embed(title=player+" Turn",description=message, color=colour)
+                print(game)
+                embedVar = discord.Embed(title=player+"'s turn - "+game,description=message, color=colour)
                 channel = await client.fetch_channel(channel_id)
                 print("channel",channel)
                 print()
