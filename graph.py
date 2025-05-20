@@ -169,7 +169,7 @@ async def on_message(message):
         plt.ylabel('Turn time (hours)')
         plt.xlabel('Turn number')
         plt.title(name+"'s Turns")
-        filename = datetime.now().strftime("%Y%m%d%H%M%S%f")+".png"
+        filename = datetime.utcnow().strftime("%Y%m%d%H%M%S%f")+".png"
         plt.savefig(filename)
 
         with open(filename, 'rb') as f:
@@ -245,7 +245,7 @@ async def on_message(message):
         #plt.yticks([1,6,12,24,48])
         plt.ylabel('Turn time (hours)')
         plt.title("Total Turn Time")
-        filename = datetime.now().strftime("%Y%m%d%H%M%S%f")+".png"
+        filename = datetime.utcnow().strftime("%Y%m%d%H%M%S%f")+".png"
         plt.savefig(filename)
 
         with open(filename, 'rb') as f:
@@ -285,7 +285,7 @@ async def on_message(message):
             plt.clf()
             fig, ax = plt.subplots()
             fig.set_size_inches(9, 5)
-            filename = datetime.now().strftime("%Y%m%d%H%M%S%f")+".png"
+            filename = datetime.utcnow().strftime("%Y%m%d%H%M%S%f")+".png"
 
             turnorder = []
             cur.execute("SELECT * FROM TURNS WHERE TURNNUMBER = 1 AND GAMENAME = ? ORDER BY TURNTIME ASC",(game,))
@@ -375,7 +375,7 @@ async def on_message(message):
 
             plt.clf()
 
-            filename = datetime.now().strftime("%Y%m%d%H%M%S%f")+".png"
+            filename = datetime.utcnow().strftime("%Y%m%d%H%M%S%f")+".png"
             
             cur.execute("SELECT * FROM TURNS WHERE GAMENAME = ?",(game,))
             allTurns = cur.fetchall()

@@ -90,7 +90,6 @@ def get_time_emoji(seconds_elapsed):
             return threshold["emoji"]
     return ":question:"  # fallback
 
-
 def str2dt(string):
     return datetime.strptime(string, "%Y-%m-%d %H:%M:%S.%f")
 
@@ -183,14 +182,14 @@ def webhook():
             print("player:",player)
             lastPlayer = turnorder[turnorder.index(player)-1]
         else: # if it's the first turn of the game
-            conn.execute("INSERT INTO TURNS (NAME, TURNTIME, TURNNUMBER, GAMENAME) VALUES(?, ?, ?, ?)",(os.getenv("host_steam_name"), str(datetime.now()-timedelta(seconds=60)), 1, game)) # add an entry for 10 seconds ago for the first player, defined in .env
+            conn.execute("INSERT INTO TURNS (NAME, TURNTIME, TURNNUMBER, GAMENAME) VALUES(?, ?, ?, ?)",(os.getenv("host_steam_name"), str(datetime.utcnow()-timedelta(seconds=60)), 1, game)) # add an entry for 10 seconds ago for the first player, defined in .env
             conn.commit()
             lastPlayer = os.getenv("host_steam_name")
 
         cur.execute("SELECT * FROM TURNS WHERE NAME = ? AND TURNNUMBER = ? AND GAMENAME = ?",(player, turn, game))
         lastTurn = cur.fetchall()
         if(len(lastTurn) == 0):
-            conn.execute("INSERT INTO TURNS (NAME, TURNTIME, TURNNUMBER, GAMENAME) VALUES(?, ?, ?, ?)",(player, str(datetime.now()), turn, game))
+            conn.execute("INSERT INTO TURNS (NAME, TURNTIME, TURNNUMBER, GAMENAME) VALUES(?, ?, ?, ?)",(player, str(datetime.utcnow()), turn, game))
             conn.commit()
 
         # get previous turn info
@@ -205,7 +204,7 @@ def webhook():
             readable_name = get_readable_name(pName)
             pronoun = get_pronoun(pName)
 
-            time = math.floor((datetime.now()-pTurnTime).total_seconds())
+            time = math.floor((datetime.utcnow()-pTurnTime).total_seconds())
 
             # Define color thresholds
             YELLOW_THRESHOLD_SECONDS = 12 * 60 * 60  # 12 hours
@@ -255,7 +254,7 @@ def webhook():
         #r = requests.post(webhook_url, data=json.dumps(data), headers={"Content-Type": "application/json"})
         #print(r)
 
-        print(datetime.now())
+        print(datetime.utcnow())
         return "Webhook received"
 
 @client.event
