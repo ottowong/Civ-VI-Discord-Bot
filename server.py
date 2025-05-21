@@ -48,11 +48,7 @@ load_dotenv()
 app = Flask(__name__)
 # CORS(app)
 
-message_queue = []
-mention_queue = []
-colour_queue = []
-player_queue = []
-game_name_queue = []
+queue = []
 
 webhook_url = os.getenv("webhook_url")
 
@@ -243,12 +239,7 @@ def webhook():
             print("lastPlayer",lastPlayer)
             print("oldTurn",oldTurn)
 
-        colour_queue.append(color)
-        player_queue.append(player)
-        message_queue.append(content)
-        mention_queue.append(discordName)
-        game_name_queue.append(game)
-
+        queue.append((color, player, message, mention, game))
         
         # data = {"content":content}
         #r = requests.post(webhook_url, data=json.dumps(data), headers={"Content-Type": "application/json"})
@@ -261,12 +252,8 @@ def webhook():
 async def on_ready():
     while True:
         try:
-            if message_queue:
-                message = message_queue.pop(0)
-                player = player_queue.pop(0)
-                mention = mention_queue.pop(0)
-                colour = colour_queue.pop(0)
-                game = game_name_queue.pop(0)
+            if queue:
+                colour, player, message, mention, game = queue.pop(0)
                 print(message)
                 print(player)
                 print(colour)
@@ -283,7 +270,7 @@ async def on_ready():
     
             await asyncio.sleep(1)
         except Exception as e:
-            print("ERROR IN MESSAGE_QUEUE",e)
+            print("ERROR IN QUEUE",e)
             await asyncio.sleep(1)
 
 def run_flask():
